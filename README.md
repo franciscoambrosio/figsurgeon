@@ -1,6 +1,6 @@
 # figsurgeon
 
-Image editing that a model can drive, and that **reports what actually changed**: every edit
+Image editing that an agent can drive, and that **reports what actually changed**: every edit
 is checked against the output pixels, not assumed to have worked.
 
 > **figsurgeon builds on frontier image models rather than competing with them.** A hosted

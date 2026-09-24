@@ -1,0 +1,374 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>figsurgeon playground</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.4 -apple-system, Helvetica, Arial, sans-serif; color: #222; }
+  #layout { display: flex; height: 100vh; }
+  #left { flex: 1; overflow: auto; background: #333; display: flex; align-items: flex-start;
+          justify-content: flex-start; padding: 16px; }
+  #imgwrap { position: relative; display: inline-block; cursor: crosshair; line-height: 0; }
+  #photo { display: block; user-select: none; -webkit-user-drag: none; }
+  #box { position: absolute; border: 2px solid #ff5722; background: rgba(255,87,34,0.15);
+         pointer-events: none; display: none; }
+  #right { width: 360px; flex-shrink: 0; padding: 16px; background: #fafafa;
+           border-left: 1px solid #ddd; overflow: auto; }
+  h1 { font-size: 15px; margin: 0 0 12px; }
+  label { display: block; margin: 12px 0 4px; font-weight: 600; font-size: 12px;
+          text-transform: uppercase; color: #555; }
+  select, input[type=text], input[type=color], textarea {
+          width: 100%; padding: 6px; font-size: 14px; font-family: inherit;
+          border: 1px solid #ccc; border-radius: 4px; }
+  textarea { resize: vertical; min-height: 54px; }
+  button { font-size: 14px; font-weight: 600; border: none; border-radius: 4px;
+           cursor: pointer; padding: 9px; }
+  button:disabled { background: #999 !important; cursor: default; }
+  .primary { width: 100%; margin-top: 10px; background: #ff5722; color: white; }
+  .row { display: flex; gap: 8px; margin-top: 10px; }
+  .row button { flex: 1; background: #e4e4e4; color: #333; }
+  .hint { font-size: 11px; color: #888; margin-top: 4px; }
+  fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 10px 12px 14px;
+             margin: 16px 0 0; }
+  legend { font-size: 11px; text-transform: uppercase; color: #666; font-weight: 700;
+           padding: 0 4px; }
+  #verdict { margin-top: 16px; padding: 12px; border-radius: 6px; border: 1px solid #ddd; }
+  #state { font-size: 15px; font-weight: 700; padding: 4px 8px; border-radius: 4px;
+           display: inline-block; }
+  .st-PASS { background: #e6f4ea; color: #1e7e34; }
+  .st-FAIL { background: #fdecea; color: #b71c1c; }
+  .st-UNDECIDED { background: #fff4e5; color: #a05a00; }
+  .st-NO_VERDICT { background: #eee; color: #555; }
+  .st-PENDING { background: #e8eef7; color: #2255aa; }
+  #detail { margin-top: 8px; font-size: 12.5px; color: #444; }
+  #note { margin-top: 8px; font-size: 12.5px; color: #444; }
+  .caption { margin-top: 10px; font-size: 11.5px; color: #666; line-height: 1.4; }
+  #history { margin-top: 8px; font-size: 12px; }
+  #history li { margin-bottom: 6px; }
+  #history .trace { margin: 4px 0 2px 0; }
+  #history .trace summary { cursor: pointer; color: #666; font-size: 11px; }
+  #history .t-tool { margin: 4px 0 4px 10px; }
+  #history .t-tool code { font-size: 11px; color: #225; }
+  #history .t-note { color: #666; font-size: 11px; margin-left: 10px; }
+  #history .t-said { margin: 4px 0 4px 10px; font-size: 11.5px; color: #333;
+                     border-left: 2px solid #ccc; padding-left: 6px; }
+  #history .t-refused { border-left-color: #c33; color: #c33; }
+  #history .tag { font-weight: 700; font-size: 10px; padding: 1px 5px; border-radius: 3px; }
+  #err { margin-top: 10px; font-size: 12.5px; color: #b71c1c; }
+</style>
+</head>
+<body>
+<div id="layout">
+  <div id="left">
+    <div id="imgwrap">
+      <img id="photo" alt="">
+      <div id="box"></div>
+    </div>
+  </div>
+  <div id="right">
+    <h1>figsurgeon playground</h1>
+
+    <label for="photoSelect">photograph</label>
+    <select id="photoSelect"></select>
+
+    <fieldset>
+      <legend>say what you want</legend>
+      <textarea id="instruction"
+        placeholder="make the red car blue, then crop out the sky"></textarea>
+      <div class="hint">runs the real agent loop over OpenRouter: it looks, edits, and
+        each step is verified. No box needed.</div>
+      <input type="text" id="model" placeholder="z-ai/glm-5.3-flash" style="margin-top:8px">
+      <button id="run-instruct" class="primary">run instruction</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>or drive one tool yourself</legend>
+      <label for="op">op</label>
+      <select id="op">
+        <option value="erase_object">erase</option>
+        <option value="recolour_object">recolour</option>
+        <option value="isolate_object">isolate</option>
+        <option value="extract_object">extract</option>
+        <option value="scale_object">scale</option>
+        <option value="generative_fill">generative fill</option>
+      </select>
+      <div id="colourRow" style="display:none">
+        <label for="toRgb">target colour</label>
+        <input type="color" id="toRgb" value="#3366cc">
+      </div>
+      <div id="scaleRow" style="display:none">
+        <label for="scale">scale (1.0 = unchanged, 0.5 = half size, 2.0 = double)</label>
+        <input type="number" id="scale" value="0.5" step="0.1" min="0.01">
+      </div>
+      <div id="fillRow" style="display:none">
+        <label for="fillInstruction">what should this region contain</label>
+        <input type="text" id="fillInstruction"
+               placeholder="plain brick wall continuing the wall around it">
+        <div class="hint">sends the boxed region plus its surroundings to a hosted image
+          model. Costs a network call and real money, and never returns the same thing
+          twice.</div>
+        <label style="display:flex; align-items:center; gap:6px; margin-top:8px;
+                      text-transform:none; font-weight:400; font-size:13px;">
+          <input type="checkbox" id="maskToObject" style="width:auto;">
+          mask to the segmented object, not the whole box
+        </label>
+        <div class="hint">off: the whole rectangle may change, background included. on:
+          only the object the segmenter finds inside the box changes -- draw the box
+          loosely around it, the rest of the box keeps its original pixels.</div>
+      </div>
+      <div id="subjectRow">
+        <label for="subject">subject</label>
+        <input type="text" id="subject" placeholder="the red car">
+        <div class="hint">graded against your words. blank = the edit runs but is NOT
+          checked for correctness.</div>
+      </div>
+      <button id="run" class="primary" disabled>draw a box first</button>
+    </fieldset>
+
+    <div class="row">
+      <button id="undo">&#8592; undo</button>
+      <button id="redo">redo &#8594;</button>
+      <button id="reset">reset</button>
+    </div>
+
+    <div id="verdict" style="display:none">
+      <span id="state" class="st-NO_VERDICT">--</span>
+      <div id="detail"></div>
+      <div id="note"></div>
+      <div class="caption">A verdict is one signal, not a quality judgement. Compare it
+        against the picture: this package's own evals found checks that read clean on
+        output a person would reject. <code>erase</code> has no PASS at all, for that
+        reason.</div>
+    </div>
+
+    <fieldset>
+      <legend>history (undo walks back through this)</legend>
+      <ol id="history"><li style="color:#888">no edits yet</li></ol>
+    </fieldset>
+
+    <div id="err" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const photoSelect = $('photoSelect'), opSelect = $('op'), colourRow = $('colourRow');
+const toRgb = $('toRgb'), subjectInput = $('subject'), runBtn = $('run');
+const scaleRow = $('scaleRow'), scaleInput = $('scale');
+const fillRow = $('fillRow'), fillInstructionInput = $('fillInstruction');
+const maskToObjectInput = $('maskToObject');
+const subjectRow = $('subjectRow');
+const instruction = $('instruction'), modelInput = $('model'), instructBtn = $('run-instruct');
+const img = $('photo'), boxDiv = $('box'), verdictPanel = $('verdict'), stateEl = $('state');
+const detailEl = $('detail'), noteEl = $('note'), historyEl = $('history'), errEl = $('err');
+
+let currentBox = null;            // [x0,y0,x1,y1] in working-image pixel space
+let dragStart = null;
+let busy = false;
+// Whether there is anywhere to GO, as of the last render. Kept out here because setBusy
+// runs after render (and on a drag, and on an op change) and would otherwise re-enable
+// both buttons at the ends of the history -- which is how they stayed clickable with
+// nothing left to undo.
+let canUndo = false, canRedo = false;
+
+function setBusy(on, label) {
+  busy = on;
+  runBtn.disabled = on || !currentBox;
+  instructBtn.disabled = on;
+  $('undo').disabled = on || !canUndo;
+  $('redo').disabled = on || !canRedo;
+  $('reset').disabled = on;
+  if (on) {
+    verdictPanel.style.display = 'block';
+    stateEl.className = 'st-PENDING';
+    stateEl.textContent = label;
+    detailEl.textContent = 'first model-backed run loads weights and can take ~20s.';
+    noteEl.textContent = '';
+  }
+  runBtn.textContent = currentBox ? 'run on this box' : 'draw a box first';
+}
+
+function updateOpUI() {
+  colourRow.style.display = opSelect.value === 'recolour_object' ? 'block' : 'none';
+  scaleRow.style.display = opSelect.value === 'scale_object' ? 'block' : 'none';
+  fillRow.style.display = opSelect.value === 'generative_fill' ? 'block' : 'none';
+  // Neither tool takes `subject` -- scale_object goes by the box alone, generative_fill
+  // invents content rather than pointing at something already there.
+  subjectRow.style.display = (opSelect.value === 'scale_object'
+                              || opSelect.value === 'generative_fill') ? 'none' : 'block';
+  setBusy(busy, '');
+}
+opSelect.addEventListener('change', updateOpUI);
+
+function clientToImagePx(e) {
+  const r = img.getBoundingClientRect();
+  const x = Math.round(e.clientX - r.left), y = Math.round(e.clientY - r.top);
+  return [Math.max(0, Math.min(img.naturalWidth, x)),
+          Math.max(0, Math.min(img.naturalHeight, y))];
+}
+
+img.addEventListener('mousedown', (e) => {
+  dragStart = clientToImagePx(e);
+  boxDiv.style.display = 'block';
+  boxDiv.style.left = dragStart[0] + 'px'; boxDiv.style.top = dragStart[1] + 'px';
+  boxDiv.style.width = '0px'; boxDiv.style.height = '0px';
+  e.preventDefault();
+});
+
+window.addEventListener('mousemove', (e) => {
+  if (!dragStart) return;
+  const [x, y] = clientToImagePx(e);
+  const x0 = Math.min(dragStart[0], x), x1 = Math.max(dragStart[0], x);
+  const y0 = Math.min(dragStart[1], y), y1 = Math.max(dragStart[1], y);
+  boxDiv.style.left = x0 + 'px'; boxDiv.style.top = y0 + 'px';
+  boxDiv.style.width = (x1 - x0) + 'px'; boxDiv.style.height = (y1 - y0) + 'px';
+});
+
+window.addEventListener('mouseup', (e) => {
+  if (!dragStart) return;
+  const [x, y] = clientToImagePx(e);
+  const x0 = Math.min(dragStart[0], x), x1 = Math.max(dragStart[0], x);
+  const y0 = Math.min(dragStart[1], y), y1 = Math.max(dragStart[1], y);
+  dragStart = null;
+  if (x1 - x0 < 4 || y1 - y0 < 4) { currentBox = null; boxDiv.style.display = 'none'; }
+  else { currentBox = [x0, y0, x1, y1]; }
+  setBusy(false, '');
+});
+
+function esc(v) {
+  const d = document.createElement('div');
+  d.textContent = v === null || v === undefined ? '' : String(v);
+  return d.innerHTML;
+}
+
+function shortArgs(args) {
+  if (!args) return '';
+  // Boxes and colours are the arguments worth reading; a base64 blob is not, and neither
+  // is a wrapped line per key. One line, truncated, with the full value in the title.
+  const s = Object.entries(args).map(([k, v]) =>
+    `${k}=${Array.isArray(v) ? '[' + v.join(',') + ']' : v}`).join(' ');
+  return s.length > 90 ? s.slice(0, 90) + '…' : s;
+}
+
+function hexToRgb(hex) {
+  const v = parseInt(hex.slice(1), 16);
+  return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+}
+
+function render(state) {
+  img.src = state.image;
+  img.width = state.width; img.height = state.height;
+  // A crop or resize moves every coordinate; the old box would edit confidently in the
+  // wrong place, so it is dropped whenever the image changes shape.
+  if (img.naturalWidth && (state.width !== img.naturalWidth)) {
+    currentBox = null; boxDiv.style.display = 'none';
+  }
+  const last = state.history.length ? state.history[state.history.length - 1] : null;
+  verdictPanel.style.display = 'block';
+  if (last) {
+    stateEl.className = 'st-' + last.state;
+    stateEl.textContent = {PASS: 'PASS', FAIL: 'FAIL',
+      UNDECIDED: 'undecided — look at it', NO_VERDICT: 'no verdict'}[last.state];
+    detailEl.textContent = last.detail || '';
+  } else {
+    stateEl.className = 'st-NO_VERDICT';
+    stateEl.textContent = 'no edits';
+    detailEl.textContent = '';
+  }
+  noteEl.textContent = state.note || '';
+  // Nothing forward to go to, or a new edit abandoned it: say so by disabling, so the
+  // button is never a control that silently does nothing.
+  canUndo = state.history.length > 0;
+  canRedo = !!state.redo;
+  $('redo').textContent = state.redo > 1 ? `redo \u2192 (${state.redo})` : 'redo \u2192';
+  historyEl.innerHTML = state.history.length ? '' :
+    '<li style="color:#888">no edits yet</li>';
+  state.history.forEach((h) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="tag st-${h.state}">${h.state}</span> ${esc(h.name)}`;
+    // An instruction carries what the model said and every tool it called on the way. It
+    // is collapsed by default: it is the reason for the result, wanted when the result is
+    // surprising, and it is long enough to bury the history if it is always open.
+    if (h.trace && h.trace.length) {
+      const d = document.createElement('details');
+      d.className = 'trace';
+      d.innerHTML = `<summary>${h.trace.length} step(s) &mdash; what the model did</summary>` +
+        h.trace.map((r) => r.kind === 'tool'
+          ? `<div class="t-tool"><code>${esc(r.name)}(${esc(shortArgs(r.args))})</code>
+             <div class="t-note">${esc(r.text)}</div></div>`
+          : `<div class="t-said ${r.kind === 'refused' ? 't-refused' : ''}">${esc(r.text)}</div>`
+        ).join('');
+      li.appendChild(d);
+    }
+    historyEl.appendChild(li);
+  });
+  setBusy(false, '');
+}
+
+async function post(route, body) {
+  errEl.style.display = 'none';
+  try {
+    const r = await fetch(route, {method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(Object.assign({image: photoSelect.value}, body))});
+    const data = await r.json();
+    if (data.error) throw new Error(data.error);
+    render(data);
+  } catch (e) {
+    errEl.style.display = 'block';
+    errEl.textContent = String(e.message || e);
+    setBusy(false, '');
+    verdictPanel.style.display = 'none';
+  }
+}
+
+runBtn.addEventListener('click', () => {
+  if (!currentBox) return;
+  setBusy(true, 'running…');
+  post('/api/edit', {box: currentBox, op: opSelect.value,
+                     subject: subjectInput.value,
+                     to_rgb: opSelect.value === 'recolour_object'
+                             ? hexToRgb(toRgb.value) : null,
+                     scale: opSelect.value === 'scale_object'
+                            ? parseFloat(scaleInput.value) : null,
+                     instruction: opSelect.value === 'generative_fill'
+                                  ? fillInstructionInput.value : null,
+                     mask_to_object: opSelect.value === 'generative_fill'
+                                     ? maskToObjectInput.checked : null});
+});
+
+instructBtn.addEventListener('click', () => {
+  const text = instruction.value.trim();
+  if (!text) return;
+  setBusy(true, 'thinking…');
+  post('/api/instruct', {text: text, model: modelInput.value.trim() || null});
+});
+
+$('undo').addEventListener('click', () => { setBusy(true, 'undoing…');
+                                            post('/api/undo', {steps: 1}); });
+$('redo').addEventListener('click', () => { setBusy(true, 'redoing…');
+                                            post('/api/redo', {steps: 1}); });
+$('reset').addEventListener('click', () => { setBusy(true, 'resetting…');
+                                             post('/api/reset', {}); });
+
+async function loadState() {
+  const r = await fetch('/api/state?name=' + encodeURIComponent(photoSelect.value));
+  currentBox = null; boxDiv.style.display = 'none';
+  render(await r.json());
+}
+photoSelect.addEventListener('change', loadState);
+
+(async function start() {
+  const data = await (await fetch('/api/photos')).json();
+  for (const name of data.photos) {
+    const opt = document.createElement('option');
+    opt.value = name; opt.textContent = name;
+    photoSelect.appendChild(opt);
+  }
+  modelInput.placeholder = data.default_model;
+  await loadState();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "figsurgeon"
+version = "0.2.0"
+description = "Image editing a model can drive, with every edit verified against the output pixels."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "Pillow>=9.0",
+]
+
+[project.urls]
+Repository = "https://github.com/franciscoambrosio/figsurgeon"
+
+[project.optional-dependencies]
+# CLIPSeg phrase grounding and the SlimSAM segmenter; imported lazily, never at package import.
+grounding = ["torch>=2.0", "transformers>=4.40"]
+demo = ["scikit-image>=0.20"]                       # only for demo_photos.py's sample images
+advanced = ["opencv-python-headless>=4.8", "rembg[cpu]>=2.0"]   # background removal, inpainting, denoise
+agent = ["anthropic>=0.40"]     # the LLM loop in agent.py
+rebrand = ["matplotlib>=3.5", "pytesseract>=0.3"]   # colormap remapping, OCR-based font swap
+# rebrand also needs the tesseract binary, which pip cannot install (apt-get install tesseract-ocr).
+mcp = ["mcp>=1.0,<2"]   # figsurgeon.mcp_server; pinned below 2.0, which renamed this API
+
+[project.scripts]
+figsurgeon = "figsurgeon.cli:main"
+
+[tool.setuptools]
+packages = ["figsurgeon"]

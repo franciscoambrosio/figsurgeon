@@ -1,0 +1,64 @@
+{
+  "case": "cat_cutout",
+  "request": "Cut the cat out onto a transparent background.",
+  "image": "evals/_corpus/agent_loop/cat.jpg",
+  "driver_said": "Extracted the cat onto a transparent background using extract_object, after checking the segmentation mask with preview_object_mask.",
+  "final_image": "evals/agent_loop/out/cat_cutout_final.png",
+  "total_seconds": 70.0,
+  "steps": [
+    {
+      "step": 1,
+      "tool": "show_grid",
+      "args": {},
+      "note": "grid overlay shown on the 1060x1060 image. Read box coordinates off the labelled lines; the image itself is unchanged.",
+      "verified": null,
+      "seconds": 0.3,
+      "preview": "evals/agent_loop/out/cat_cutout_step1_show_grid.png"
+    },
+    {
+      "step": 2,
+      "tool": "preview_object_mask",
+      "args": {
+        "subject": "cat"
+      },
+      "note": "error running preview_object_mask: this tool needs a box (or boxes, or points on the object)",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 3,
+      "tool": "preview_object_mask",
+      "args": {
+        "subject": "cat",
+        "box": [
+          400,
+          300,
+          730,
+          860
+        ]
+      },
+      "note": "segmentation found 54.5% of the box (shown in colour, everything else dimmed) | NOTE: this took 11s on a 1.1 MP image. Cost is nearly flat in image size on this backend and the mask is the same at every scale, so resizing will not make it faster.",
+      "verified": null,
+      "seconds": 11.6,
+      "preview": "evals/agent_loop/out/cat_cutout_step3_preview_object_mask.png"
+    },
+    {
+      "step": 4,
+      "tool": "extract_object",
+      "args": {
+        "subject": "cat",
+        "box": [
+          400,
+          300,
+          730,
+          860
+        ]
+      },
+      "note": "object extracted as an RGBA cutout (55% of the box) | NOTE: this took 14s on a 1.1 MP image. Cost is nearly flat in image size on this backend and the mask is the same at every scale, so resizing will not make it faster. | verified: 100,833 px survived the cutout, 9% of the frame; 92% of 'cat' survived the cutout (+/- 5 %, from the words rather than from the box)",
+      "verified": true,
+      "seconds": 18.6,
+      "preview": null
+    }
+  ]
+}

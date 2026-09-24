@@ -1,0 +1,10 @@
+[
+ {"id":"astronaut_suit",  "source":"skimage", "name":"astronaut",       "box":[60,180,420,512],   "what":"the suit"},
+ {"id":"rocket",          "source":"skimage", "name":"rocket",          "box":[30,30,560,300],    "what":"the rocket"},
+ {"id":"chelsea_cat",     "source":"skimage", "name":"chelsea",         "box":[70,50,290,250],    "what":"the cat"},
+ {"id":"coffee_cup",      "source":"skimage", "name":"coffee",          "box":[60,60,540,340],    "what":"the cup"},
+ {"id":"car_red",         "source":"corpus",  "name":"car_red",         "box":[605,925,955,1025], "what":"the red car"},
+ {"id":"portrait_studio", "source":"corpus",  "name":"portrait_studio", "box":[300,60,930,1330],  "what":"the woman"},
+ {"id":"food_pizza",      "source":"corpus",  "name":"food_pizza",      "box":[40,25,1275,975],   "what":"the pizza"},
+ {"id":"flower_macro",    "source":"corpus",  "name":"flower_macro",    "box":[750,470,1210,930], "what":"the flower centre"}
+]

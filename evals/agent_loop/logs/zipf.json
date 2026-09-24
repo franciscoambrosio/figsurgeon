@@ -1,0 +1,57 @@
+{
+  "case": "zipf",
+  "request": "This figure uses default matplotlib colours. Put it in our brand palette: dark blue #00407A and light blue #52BDEC.",
+  "image": "evals/_corpus/agent_loop/zipf.png",
+  "driver_said": "Remapped the inferno-based hexbin colormap (and colorbar/text) to the two-tone brand blue palette #00407A to #52BDEC across both panels, leaving the red Zipf-law fit line as-is since it is a distinct data series, not colormap content.",
+  "final_image": "evals/agent_loop/out/zipf_final.png",
+  "total_seconds": 53.1,
+  "steps": [
+    {
+      "step": 1,
+      "tool": "show_grid",
+      "args": {},
+      "note": "grid overlay shown on the 1920x2302 image. Read box coordinates off the labelled lines; the image itself is unchanged.",
+      "verified": null,
+      "seconds": 0.3,
+      "preview": "evals/agent_loop/out/zipf_step1_show_grid.png"
+    },
+    {
+      "step": 2,
+      "tool": "remap_colormap",
+      "args": {
+        "new_colours": [
+          "#00407A",
+          "#52BDEC"
+        ]
+      },
+      "note": "remapped 1% of pixels in the whole figure (detected render alpha 1.00) | CHECK FAILED: 37,165 px remapped, 55.4% of the colormap content left on the old scale; the value each colour encodes moved by 0.004 of the scale (median) -- almost none of it was remapped. 'viridis' is probably not the colormap in this figure. The operation ran but did not do what it is meant to do. Call undo and try a different approach rather than stacking another edit on top of this one.",
+      "verified": false,
+      "seconds": 8.5,
+      "preview": null
+    },
+    {
+      "step": 3,
+      "tool": "undo",
+      "args": {},
+      "note": "undid 1 edit; back to the state before 'remap_colormap'",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 4,
+      "tool": "remap_colormap",
+      "args": {
+        "new_colours": [
+          "#00407A",
+          "#52BDEC"
+        ],
+        "source_cmap": "inferno"
+      },
+      "note": "remapped 7% of pixels in the whole figure (detected render alpha 1.00) | verified: 293,845 px remapped, 0.0% of the colormap content left on the old scale; the value each colour encodes moved by 0.004 of the scale (median)",
+      "verified": true,
+      "seconds": 4.4,
+      "preview": null
+    }
+  ]
+}

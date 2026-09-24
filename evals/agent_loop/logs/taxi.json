@@ -1,0 +1,102 @@
+{
+  "case": "taxi",
+  "request": "Keep the yellow taxis in colour and turn the rest of the street grey.",
+  "image": "evals/_corpus/agent_loop/taxi.jpg",
+  "driver_said": "Kept the yellow taxis in colour and desaturated the rest of the street to grey using isolate_colour in oklab space.",
+  "final_image": "evals/agent_loop/out/taxi_final.png",
+  "total_seconds": 67.6,
+  "steps": [
+    {
+      "step": 1,
+      "tool": "show_grid",
+      "args": {},
+      "note": "grid overlay shown on the 1920x1056 image. Read box coordinates off the labelled lines; the image itself is unchanged.",
+      "verified": null,
+      "seconds": 0.7,
+      "preview": "evals/agent_loop/out/taxi_step1_show_grid.png"
+    },
+    {
+      "step": 2,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          700,
+          760,
+          780,
+          830
+        ]
+      },
+      "note": "sampled colour is RGB(192, 134, 16) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 3,
+      "tool": "preview_colour_mask",
+      "args": {
+        "target_rgb": [
+          192,
+          134,
+          16
+        ],
+        "hue_tolerance": 0.07
+      },
+      "note": "19.9% of the image matches that colour in hsv at tolerance 0.07 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 1.7,
+      "preview": "evals/agent_loop/out/taxi_step3_preview_colour_mask.png"
+    },
+    {
+      "step": 4,
+      "tool": "preview_colour_mask",
+      "args": {
+        "target_rgb": [
+          192,
+          134,
+          16
+        ],
+        "space": "oklab",
+        "oklab_tolerance": 0.06
+      },
+      "note": "6.1% of the image matches that colour in oklab at tolerance 0.06 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 1.9,
+      "preview": "evals/agent_loop/out/taxi_step4_preview_colour_mask.png"
+    },
+    {
+      "step": 5,
+      "tool": "preview_colour_mask",
+      "args": {
+        "target_rgb": [
+          192,
+          134,
+          16
+        ],
+        "space": "oklab",
+        "oklab_tolerance": 0.04
+      },
+      "note": "1.9% of the image matches that colour in oklab at tolerance 0.04 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 1.9,
+      "preview": "evals/agent_loop/out/taxi_step5_preview_colour_mask.png"
+    },
+    {
+      "step": 6,
+      "tool": "isolate_colour",
+      "args": {
+        "target_rgb": [
+          192,
+          134,
+          16
+        ],
+        "space": "oklab",
+        "oklab_tolerance": 0.04
+      },
+      "note": "isolated 1.9% of the image near (192, 134, 16) (oklab) | verified: the colour within 0.04 of the target retained 82% of saturation, the rest of the frame retained 0%",
+      "verified": true,
+      "seconds": 2.9,
+      "preview": null
+    }
+  ]
+}

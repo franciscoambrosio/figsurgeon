@@ -1,0 +1,42 @@
+{
+ "astronaut_suit": {
+  "mask_px": 59653,
+  "clipped_away_px": 5358,
+  "fraction_of_mask": 0.08981945585301661
+ },
+ "rocket": {
+  "mask_px": 135372,
+  "clipped_away_px": 18782,
+  "fraction_of_mask": 0.13874361020004136
+ },
+ "chelsea_cat": {
+  "mask_px": 31150,
+  "clipped_away_px": 376,
+  "fraction_of_mask": 0.012070626003210273
+ },
+ "coffee_cup": {
+  "mask_px": 56968,
+  "clipped_away_px": 75,
+  "fraction_of_mask": 0.0013165285774469878
+ },
+ "car_red": {
+  "mask_px": 24724,
+  "clipped_away_px": 2082,
+  "fraction_of_mask": 0.08420967480990131
+ },
+ "portrait_studio": {
+  "mask_px": 584071,
+  "clipped_away_px": 12220,
+  "fraction_of_mask": 0.020922113921081512
+ },
+ "food_pizza": {
+  "mask_px": 756240,
+  "clipped_away_px": 13795,
+  "fraction_of_mask": 0.01824156352480694
+ },
+ "flower_macro": {
+  "mask_px": 157609,
+  "clipped_away_px": 4586,
+  "fraction_of_mask": 0.02909732312241052
+ }
+}

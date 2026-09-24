@@ -1,0 +1,62 @@
+{
+  "case": "cat_erase",
+  "request": "Remove the cat from the picture.",
+  "image": "evals/_corpus/agent_loop/cat.jpg",
+  "driver_said": "Attempted to erase the cat via erase_object, but the inpainting fill left a clearly visible cat-shaped ghost against the podium and light-streak background, so I undid the edit and left the image unedited rather than deliver an unconvincing result.",
+  "final_image": "evals/agent_loop/out/cat_erase_final.png",
+  "total_seconds": 67.1,
+  "steps": [
+    {
+      "step": 1,
+      "tool": "show_grid",
+      "args": {},
+      "note": "grid overlay shown on the 1060x1060 image. Read box coordinates off the labelled lines; the image itself is unchanged.",
+      "verified": null,
+      "seconds": 0.3,
+      "preview": "evals/agent_loop/out/cat_erase_step1_show_grid.png"
+    },
+    {
+      "step": 2,
+      "tool": "preview_object_mask",
+      "args": {
+        "subject": "cat",
+        "box": [
+          400,
+          290,
+          740,
+          835
+        ]
+      },
+      "note": "segmentation found 54.0% of the box (shown in colour, everything else dimmed) | NOTE: this took 12s on a 1.1 MP image. Cost is nearly flat in image size on this backend and the mask is the same at every scale, so resizing will not make it faster.",
+      "verified": null,
+      "seconds": 12.4,
+      "preview": "evals/agent_loop/out/cat_erase_step2_preview_object_mask.png"
+    },
+    {
+      "step": 3,
+      "tool": "erase_object",
+      "args": {
+        "subject": "cat",
+        "box": [
+          400,
+          290,
+          740,
+          835
+        ]
+      },
+      "note": "object erased (9.5% of frame) | segmented region covers 9% of the frame -- inpainting has no information about what was actually behind a large object and interpolates surrounding texture instead of reconstructing it. Measured: convincing at ~1% of frame (a thin mast against sky), smears visibly at ~33% (a cup on a table). Inspect the result rather than trusting it. | the object continued past the box: 1% of it was outside, and those pixels were edited too. Region actually touched: (399, 290, 740, 857). Pass follow_object=False to cut the object at the box instead. | NOTE: this took 13s on a 1.1 MP image. Cost is nearly flat in image size on this backend and the mask is the same at every scale, so resizing will not make it faster. | check inconclusive: 0 px changed outside the target region",
+      "verified": null,
+      "seconds": 12.9,
+      "preview": null
+    },
+    {
+      "step": 4,
+      "tool": "undo",
+      "args": {},
+      "note": "undid 1 edit; back to the state before 'erase_object'",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    }
+  ]
+}

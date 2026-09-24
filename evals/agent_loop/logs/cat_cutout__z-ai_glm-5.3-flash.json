@@ -1,0 +1,69 @@
+{
+  "case": "cat_cutout",
+  "request": "Cut the cat out onto a transparent background.",
+  "image": "evals/_corpus/agent_loop/cat.jpg",
+  "model": "z-ai/glm-5.3-flash",
+  "driver_said": "I'll cut the cat out with a transparent background. First, let me put a coordinate grid on the image to locate the cat precisely. The cat occupies roughly x 390\u2013750, y 290\u2013845. Let me verify the segmentation finds the cat (not the podium) before cutting. The segmentation mask cleanly covers the cat only \u2014 ears, whiskers, paws, and body \u2014 leaving the podium and lights out. Now I'll cut it out with a transparent background. The cutout is done. Let me zoom in on the cat's edges to check for any leftover background artifacts. The cat has been cut out onto a transparent background. \n\n**Result:** The RGBA cutout keeps only the cat \u2014 ears, whiskers, paws, and tail tip all intact \u2014 with the blue podium and streaked background fully transparent. I verified the segmentation mask first (it covered only the cat, not the stage or lights), then cut it out: 91% of the frame is transparent, with the cat cleanly isolated in the center. Edge check shows no leftover background fragments.",
+  "refused": null,
+  "final_image": "evals/agent_loop/out/cat_cutout__z-ai_glm-5.3-flash_final.png",
+  "total_seconds": 106.5,
+  "usage": {
+    "prompt_tokens": 58467,
+    "completion_tokens": 1228,
+    "cost": 0.005331378000000001
+  },
+  "steps": [
+    {
+      "step": 1,
+      "tool": "show_grid",
+      "args": {
+        "step": 100
+      },
+      "note": "grid overlay shown on the 1060x1060 image. Read box coordinates off the labelled lines; the image itself is unchanged.",
+      "verified": null,
+      "seconds": 0.1,
+      "preview": "evals/agent_loop/out/cat_cutout__z-ai_glm-5.3-flash_step1_show_grid.png"
+    },
+    {
+      "step": 2,
+      "tool": "preview_object_mask",
+      "args": {
+        "box": [
+          385,
+          285,
+          750,
+          850
+        ]
+      },
+      "note": "segmentation found 48.9% of the box (shown in colour, everything else dimmed) | NOTE: this took 35s on a 1.1 MP image. Cost is nearly flat in image size on this backend and the mask is the same at every scale, so resizing will not make it faster.",
+      "verified": null,
+      "seconds": 35.4,
+      "preview": "evals/agent_loop/out/cat_cutout__z-ai_glm-5.3-flash_step2_preview_object_mask.png"
+    },
+    {
+      "step": 3,
+      "tool": "remove_background",
+      "args": {},
+      "note": "background removed (RGBA); subject covers 9% of the frame | verified: 91% transparent, 9% opaque",
+      "verified": true,
+      "seconds": 9.0,
+      "preview": null
+    },
+    {
+      "step": 4,
+      "tool": "zoom",
+      "args": {
+        "box": [
+          380,
+          280,
+          760,
+          860
+        ]
+      },
+      "note": "showing region (342, 222, 798, 918) enlarged to 503x768 (the image itself is unchanged)",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": "evals/agent_loop/out/cat_cutout__z-ai_glm-5.3-flash_step4_zoom.png"
+    }
+  ]
+}

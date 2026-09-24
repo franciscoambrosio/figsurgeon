@@ -1,0 +1,5 @@
+[
+ {"id": "shoe_white",  "source": "corpus",  "name": "product_white", "box": [560, 150, 1010, 650], "what": "the white shoe"},
+ {"id": "night_tower", "source": "corpus",  "name": "night_city",    "box": [855, 10, 1015, 700],  "what": "the tower"},
+ {"id": "camera_man",  "source": "skimage", "name": "camera",        "box": [80, 70, 400, 512],    "what": "the man"}
+]

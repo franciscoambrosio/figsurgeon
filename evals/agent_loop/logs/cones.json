@@ -1,0 +1,153 @@
+{
+  "case": "cones",
+  "request": "Make the traffic cones blue.",
+  "image": "evals/_corpus/agent_loop/roadworks.jpg",
+  "driver_said": "Recoloured the orange traffic cones to blue using a hue-based hsv replace_colour, verified by the hue-gap check.",
+  "final_image": "evals/agent_loop/out/cones_final.png",
+  "total_seconds": 85.8,
+  "steps": [
+    {
+      "step": 1,
+      "tool": "show_grid",
+      "args": {},
+      "note": "grid overlay shown on the 1600x1200 image. Read box coordinates off the labelled lines; the image itself is unchanged.",
+      "verified": null,
+      "seconds": 1.1,
+      "preview": "evals/agent_loop/out/cones_step1_show_grid.png"
+    },
+    {
+      "step": 2,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          1065,
+          660,
+          1130,
+          750
+        ]
+      },
+      "note": "sampled colour is RGB(138, 143, 149) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 3,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          1350,
+          850,
+          1480,
+          920
+        ]
+      },
+      "note": "sampled colour is RGB(118, 105, 102) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 4,
+      "tool": "zoom",
+      "args": {
+        "box": [
+          1300,
+          700,
+          1550,
+          1000
+        ]
+      },
+      "note": "showing region (1275, 670, 1575, 1030) enlarged to 640x768 (the image itself is unchanged)",
+      "verified": null,
+      "seconds": 0.3,
+      "preview": "evals/agent_loop/out/cones_step4_zoom.png"
+    },
+    {
+      "step": 5,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          1434,
+          834,
+          1481,
+          895
+        ]
+      },
+      "note": "sampled colour is RGB(142, 68, 38) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 6,
+      "tool": "preview_colour_mask",
+      "args": {
+        "target_rgb": [
+          142,
+          68,
+          38
+        ],
+        "space": "oklab",
+        "oklab_tolerance": 0.06
+      },
+      "note": "4.0% of the image matches that colour in oklab at tolerance 0.06 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 1.8,
+      "preview": "evals/agent_loop/out/cones_step6_preview_colour_mask.png"
+    },
+    {
+      "step": 7,
+      "tool": "replace_colour",
+      "args": {
+        "from_rgb": [
+          142,
+          68,
+          38
+        ],
+        "to_rgb": [
+          30,
+          90,
+          220
+        ],
+        "space": "oklab",
+        "oklab_tolerance": 0.06
+      },
+      "note": "recoloured 12.6% of pixels (oklab) | CHECK FAILED: hue gap to target 0.445 -> 0.303 (32% closed), brightness preserved 96%. The operation ran but did not do what it is meant to do. Call undo and try a different approach rather than stacking another edit on top of this one.",
+      "verified": false,
+      "seconds": 1.9,
+      "preview": null
+    },
+    {
+      "step": 8,
+      "tool": "undo",
+      "args": {},
+      "note": "undid 1 edit; back to the state before 'replace_colour'",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 9,
+      "tool": "replace_colour",
+      "args": {
+        "from_rgb": [
+          142,
+          68,
+          38
+        ],
+        "to_rgb": [
+          30,
+          90,
+          220
+        ],
+        "space": "hsv",
+        "hue_tolerance": 0.07
+      },
+      "note": "recoloured 21.6% of pixels (hsv) | verified: hue gap to target 0.445 -> 0.001 (100% closed), brightness preserved 100%",
+      "verified": true,
+      "seconds": 1.6,
+      "preview": null
+    }
+  ]
+}

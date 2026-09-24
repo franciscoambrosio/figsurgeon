@@ -1,0 +1,34 @@
+{
+  "case": "heatmap",
+  "request": "Re-theme this heatmap to our brand blues, #00407A to #52BDEC, and keep what the colours mean.",
+  "image": "evals/_corpus/agent_loop/heatmap.png",
+  "driver_said": "Remapped the viridis colormap of the GCD heatmap to the brand blue gradient #00407A to #52BDEC, applied to plot and colorbar together so the value-to-colour mapping stayed intact.",
+  "final_image": "evals/agent_loop/out/heatmap_final.png",
+  "total_seconds": 24.6,
+  "steps": [
+    {
+      "step": 1,
+      "tool": "show_grid",
+      "args": {},
+      "note": "grid overlay shown on the 800x600 image. Read box coordinates off the labelled lines; the image itself is unchanged.",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": "evals/agent_loop/out/heatmap_step1_show_grid.png"
+    },
+    {
+      "step": 2,
+      "tool": "remap_colormap",
+      "args": {
+        "source_cmap": "viridis",
+        "new_colours": [
+          "#00407A",
+          "#52BDEC"
+        ]
+      },
+      "note": "remapped 52% of pixels in the whole figure (detected render alpha 1.00) | verified: 251,695 px remapped, 0.0% of the colormap content left on the old scale; the value each colour encodes moved by 0.000 of the scale (median)",
+      "verified": true,
+      "seconds": 1.5,
+      "preview": null
+    }
+  ]
+}

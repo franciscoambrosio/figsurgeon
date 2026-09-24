@@ -1,0 +1,204 @@
+{
+  "case": "cones",
+  "request": "Make the traffic cones blue.",
+  "image": "evals/_corpus/agent_loop/roadworks.jpg",
+  "model": "z-ai/glm-5.3-flash",
+  "driver_said": "The mask catches the cones \u2014 but also the Shell pump branding and red signs on the left. Let me sample the actual cone orange and tighten the tolerance so the pumps stay untouched. That sample hit asphalt, not the cone. Let me put a grid on the image to read coordinates precisely. Still hitting grey background. Let me zoom in on that foreground cone to find its exact  Now I can see the cone clearly. Its body sits around x 1245\u20131290, y 780\u2013850. That reads darker than the visible orange \u2014 likely mixed with shading. Let me sample the larger cone body on the right. The zoom maps back: the cone's orange body is around x 1440\u20131480, y 850\u2013900.",
+  "refused": null,
+  "final_image": "evals/agent_loop/out/cones__z-ai_glm-5.3-flash_final.png",
+  "total_seconds": 861.1,
+  "usage": {
+    "prompt_tokens": 170890,
+    "completion_tokens": 6504,
+    "cost": 0.007602020000000001
+  },
+  "steps": [
+    {
+      "step": 1,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          1240,
+          800,
+          1300,
+          870
+        ]
+      },
+      "note": "sampled colour is RGB(121, 106, 104) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 2,
+      "tool": "preview_colour_mask",
+      "args": {
+        "space": "oklab",
+        "target_rgb": [
+          220,
+          90,
+          30
+        ]
+      },
+      "note": "1.5% of the image matches that colour in oklab at tolerance 0.06 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 1.7,
+      "preview": "evals/agent_loop/out/cones__z-ai_glm-5.3-flash_step2_preview_colour_mask.png"
+    },
+    {
+      "step": 3,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          1400,
+          820,
+          1480,
+          900
+        ]
+      },
+      "note": "sampled colour is RGB(122, 117, 117) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 4,
+      "tool": "show_grid",
+      "args": {
+        "step": 100
+      },
+      "note": "grid overlay shown on the 1600x1200 image. Read box coordinates off the labelled lines; the image itself is unchanged.",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": "evals/agent_loop/out/cones__z-ai_glm-5.3-flash_step4_show_grid.png"
+    },
+    {
+      "step": 5,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          1330,
+          780,
+          1390,
+          850
+        ]
+      },
+      "note": "sampled colour is RGB(120, 132, 139) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.1,
+      "preview": null
+    },
+    {
+      "step": 6,
+      "tool": "zoom",
+      "args": {
+        "box": [
+          1200,
+          700,
+          1450,
+          1000
+        ]
+      },
+      "note": "showing region (1175, 670, 1475, 1030) enlarged to 640x768 (the image itself is unchanged)",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": "evals/agent_loop/out/cones__z-ai_glm-5.3-flash_step6_zoom.png"
+    },
+    {
+      "step": 7,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          1250,
+          790,
+          1285,
+          840
+        ]
+      },
+      "note": "sampled colour is RGB(140, 87, 61) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 8,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          1420,
+          845,
+          1448,
+          890
+        ]
+      },
+      "note": "sampled colour is RGB(119, 114, 112) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.1,
+      "preview": null
+    },
+    {
+      "step": 9,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          1385,
+          770,
+          1415,
+          800
+        ]
+      },
+      "note": "sampled colour is RGB(129, 141, 149) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 10,
+      "tool": "zoom",
+      "args": {
+        "box": [
+          1350,
+          700,
+          1550,
+          1000
+        ]
+      },
+      "note": "showing region (1330, 670, 1570, 1030) enlarged to 512x768 (the image itself is unchanged)",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": "evals/agent_loop/out/cones__z-ai_glm-5.3-flash_step10_zoom.png"
+    },
+    {
+      "step": 11,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          1440,
+          850,
+          1480,
+          890
+        ]
+      },
+      "note": "sampled colour is RGB(148, 57, 29) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.1,
+      "preview": null
+    },
+    {
+      "step": 12,
+      "tool": "preview_colour_mask",
+      "args": {
+        "space": "oklab",
+        "target_rgb": [
+          148,
+          57,
+          29
+        ]
+      },
+      "note": "2.7% of the image matches that colour in oklab at tolerance 0.06 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 3.7,
+      "preview": "evals/agent_loop/out/cones__z-ai_glm-5.3-flash_step12_preview_colour_mask.png"
+    }
+  ]
+}

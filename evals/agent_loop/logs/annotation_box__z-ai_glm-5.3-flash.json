@@ -1,0 +1,16 @@
+{
+  "case": "annotation_box",
+  "request": "There's a text box covering part of the curve. Get rid of the box but keep the label and its arrow.",
+  "image": "evals/_corpus/agent_loop/annotation_box.png",
+  "model": "z-ai/glm-5.3-flash",
+  "driver_said": "(no closing statement)",
+  "refused": null,
+  "final_image": "evals/agent_loop/out/annotation_box__z-ai_glm-5.3-flash_final.png",
+  "total_seconds": 363.4,
+  "usage": {
+    "prompt_tokens": 8310,
+    "completion_tokens": 16000,
+    "cost": 0.0092465
+  },
+  "steps": []
+}

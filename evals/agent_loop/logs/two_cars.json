@@ -1,0 +1,83 @@
+{
+  "case": "two_cars",
+  "request": "Make the red car blue.",
+  "image": "evals/_corpus/agent_loop/two_cars.jpg",
+  "driver_said": "Stopped without editing: the request (\"make the red car blue\") is ambiguous because the image contains two cars, both the same red/maroon colour (sampled RGB(76,25,33) and RGB(110,51,67), same paint under different lighting/shadow) and same model, with no other distinguishing feature named -- there is no way to pick which one \"the red car\" refers to.",
+  "final_image": "evals/agent_loop/out/two_cars_final.png",
+  "total_seconds": 27.9,
+  "steps": [
+    {
+      "step": 1,
+      "tool": "show_grid",
+      "args": {},
+      "note": "grid overlay shown on the 1920x1440 image. Read box coordinates off the labelled lines; the image itself is unchanged.",
+      "verified": null,
+      "seconds": 0.8,
+      "preview": "evals/agent_loop/out/two_cars_step1_show_grid.png"
+    },
+    {
+      "step": 2,
+      "tool": "sample_colour",
+      "args": {
+        "region": [
+          100,
+          750,
+          500,
+          950
+        ]
+      },
+      "note": "error: missing required argument 'box' for sample_colour",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 3,
+      "tool": "sample_colour",
+      "args": {
+        "region": [
+          950,
+          700,
+          1200,
+          850
+        ]
+      },
+      "note": "error: missing required argument 'box' for sample_colour",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 4,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          100,
+          750,
+          500,
+          950
+        ]
+      },
+      "note": "sampled colour is RGB(76, 25, 33) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 5,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          950,
+          700,
+          1200,
+          850
+        ]
+      },
+      "note": "sampled colour is RGB(110, 51, 67) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "case": "chart_scatter",
+  "request": "Re-theme this scatter plot to our brand blues, #00407A to #52BDEC, and keep the colorbar matching the points.",
+  "image": "evals/_corpus/agent_loop/chart_scatter.png",
+  "model": "z-ai/glm-5.3-flash",
+  "driver_said": "Done. The whole figure \u2014 scatter points and colorbar together \u2014 is re-themed from plasma to your brand gradient (#00407A \u2192 #52BDEC). Each pixel keeps its position along the scale, so what the colours encode is unchanged, and the colorbar matches the points exactly.",
+  "refused": null,
+  "final_image": "evals/agent_loop/out/chart_scatter__z-ai_glm-5.3-flash_final.png",
+  "total_seconds": 54.8,
+  "usage": {
+    "prompt_tokens": 17695,
+    "completion_tokens": 644,
+    "cost": 0.001547195
+  },
+  "steps": [
+    {
+      "step": 1,
+      "tool": "remap_colormap",
+      "args": {
+        "new_colours": [
+          "#00407A",
+          "#52BDEC"
+        ],
+        "source_cmap": "plasma"
+      },
+      "note": "remapped 6% of pixels in the whole figure (detected render alpha 1.00) | verified: 44,078 px remapped, 0.0% of the colormap content left on the old scale; the value each colour encodes moved by 0.004 of the scale (median)",
+      "verified": true,
+      "seconds": 20.5,
+      "preview": null
+    }
+  ]
+}

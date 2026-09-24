@@ -1,0 +1,221 @@
+{
+  "case": "taxi",
+  "request": "Keep the yellow taxis in colour and turn the rest of the street grey.",
+  "image": "evals/_corpus/agent_loop/taxi.jpg",
+  "driver_said": "Isolated the taxi yellow (sampled RGB 251,181,4) using isolate_colour in hsv space at hue_tolerance 0.045, desaturating the rest of the street to grey while keeping the yellow taxis in colour.",
+  "final_image": "evals/agent_loop/out/taxi_final.png",
+  "total_seconds": 169.3,
+  "steps": [
+    {
+      "step": 1,
+      "tool": "show_grid",
+      "args": {},
+      "note": "grid overlay shown on the 1920x1056 image. Read box coordinates off the labelled lines; the image itself is unchanged.",
+      "verified": null,
+      "seconds": 0.6,
+      "preview": "evals/agent_loop/out/taxi_step1_show_grid.png"
+    },
+    {
+      "step": 2,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          955,
+          520,
+          1020,
+          565
+        ]
+      },
+      "note": "sampled colour is RGB(115, 135, 137) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 3,
+      "tool": "zoom",
+      "args": {
+        "box": [
+          750,
+          480,
+          1100,
+          650
+        ]
+      },
+      "note": "showing region (715, 463, 1135, 667) enlarged to 768x373 (the image itself is unchanged)",
+      "verified": null,
+      "seconds": 0.2,
+      "preview": "evals/agent_loop/out/taxi_step3_zoom.png"
+    },
+    {
+      "step": 4,
+      "tool": "sample_colour",
+      "args": {
+        "box": [
+          980,
+          600,
+          1030,
+          632
+        ]
+      },
+      "note": "sampled colour is RGB(251, 181, 4) -- pass this as to_rgb/from_rgb",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 5,
+      "tool": "preview_colour_mask",
+      "args": {
+        "target_rgb": [
+          251,
+          181,
+          4
+        ],
+        "space": "oklab",
+        "oklab_tolerance": 0.06
+      },
+      "note": "2.3% of the image matches that colour in oklab at tolerance 0.06 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 1.6,
+      "preview": "evals/agent_loop/out/taxi_step5_preview_colour_mask.png"
+    },
+    {
+      "step": 6,
+      "tool": "isolate_colour",
+      "args": {
+        "target_rgb": [
+          251,
+          181,
+          4
+        ],
+        "space": "oklab",
+        "oklab_tolerance": 0.06
+      },
+      "note": "isolated 2.3% of the image near (251, 181, 4) (oklab) | CHECK FAILED: target hue retained 28% of saturation, other hues retained 0%. The operation ran but did not do what it is meant to do. Call undo and try a different approach rather than stacking another edit on top of this one.",
+      "verified": false,
+      "seconds": 2.2,
+      "preview": null
+    },
+    {
+      "step": 7,
+      "tool": "undo",
+      "args": {},
+      "note": "undid 1 edit; back to the state before 'isolate_colour'",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 8,
+      "tool": "preview_colour_mask",
+      "args": {
+        "target_rgb": [
+          251,
+          181,
+          4
+        ],
+        "space": "hsv",
+        "hue_tolerance": 0.07
+      },
+      "note": "19.7% of the image matches that colour in hsv at tolerance 0.07 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 1.5,
+      "preview": "evals/agent_loop/out/taxi_step8_preview_colour_mask.png"
+    },
+    {
+      "step": 9,
+      "tool": "preview_colour_mask",
+      "args": {
+        "target_rgb": [
+          251,
+          181,
+          4
+        ],
+        "space": "hsv",
+        "hue_tolerance": 0.03
+      },
+      "note": "11.5% of the image matches that colour in hsv at tolerance 0.03 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 1.4,
+      "preview": "evals/agent_loop/out/taxi_step9_preview_colour_mask.png"
+    },
+    {
+      "step": 10,
+      "tool": "preview_colour_mask",
+      "args": {
+        "target_rgb": [
+          251,
+          181,
+          4
+        ],
+        "space": "oklab",
+        "oklab_tolerance": 0.1
+      },
+      "note": "17.3% of the image matches that colour in oklab at tolerance 0.1 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 1.8,
+      "preview": "evals/agent_loop/out/taxi_step10_preview_colour_mask.png"
+    },
+    {
+      "step": 11,
+      "tool": "preview_colour_mask",
+      "args": {
+        "target_rgb": [
+          251,
+          181,
+          4
+        ],
+        "space": "oklab",
+        "oklab_tolerance": 0.08
+      },
+      "note": "7.1% of the image matches that colour in oklab at tolerance 0.08 (matched pixels stay in colour, everything else is dimmed)",
+      "verified": null,
+      "seconds": 1.6,
+      "preview": "evals/agent_loop/out/taxi_step11_preview_colour_mask.png"
+    },
+    {
+      "step": 12,
+      "tool": "isolate_colour",
+      "args": {
+        "target_rgb": [
+          251,
+          181,
+          4
+        ],
+        "space": "oklab",
+        "oklab_tolerance": 0.08
+      },
+      "note": "isolated 7.1% of the image near (251, 181, 4) (oklab) | CHECK FAILED: target hue retained 48% of saturation, other hues retained 0%. The operation ran but did not do what it is meant to do. Call undo and try a different approach rather than stacking another edit on top of this one.",
+      "verified": false,
+      "seconds": 1.9,
+      "preview": null
+    },
+    {
+      "step": 13,
+      "tool": "undo",
+      "args": {},
+      "note": "undid 1 edit; back to the state before 'isolate_colour'",
+      "verified": null,
+      "seconds": 0.0,
+      "preview": null
+    },
+    {
+      "step": 14,
+      "tool": "isolate_colour",
+      "args": {
+        "target_rgb": [
+          251,
+          181,
+          4
+        ],
+        "space": "hsv",
+        "hue_tolerance": 0.045
+      },
+      "note": "isolated 14.5% of the image near (251, 181, 4) (hsv) | verified: target hue retained 100% of saturation, other hues retained 0%",
+      "verified": true,
+      "seconds": 1.6,
+      "preview": null
+    }
+  ]
+}
